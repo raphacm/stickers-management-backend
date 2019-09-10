@@ -1,0 +1,12 @@
+en:
+  activerecord:
+    errors:
+      models:
+        collector:
+          attributes:
+            email:
+              email: "Este não é um email válido"
+  errors:
+    messages:
+      blank: "Este campo é obrigatório"
+      taken: "Valor existente"
