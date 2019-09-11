@@ -1,32 +1,27 @@
 module API 
   module V1
     class AlbumsController < ApplicationController
-      before_action :set_album, only: [:show, :update, :destroy]
+      before_action :load_albums, only: %i[index]
+      before_action :load_album, only: %i[show update]
     
-      # GET /albums
-      def index
-        @albums = Album.all
-    
-        render json: @albums
+      def index   
+        render json: @albums, status: :ok
       end
     
-      # GET /albums/1
       def show
-        render json: @album
+        render json: @album, status: :ok
       end
     
-      # POST /albums
       def create
         @album = Album.new(album_params)
-    
+        
         if @album.save
-          render json: @album, status: :created, location: @album
+          render json: @album, status: :created
         else
           render json: @album.errors, status: :unprocessable_entity
         end
       end
     
-      # PATCH/PUT /albums/1
       def update
         if @album.update(album_params)
           render json: @album
@@ -34,21 +29,22 @@ module API
           render json: @album.errors, status: :unprocessable_entity
         end
       end
-    
-      # DELETE /albums/1
-      def destroy
-        @album.destroy
-      end
-    
+
       private
-        # Use callbacks to share common setup or constraints between actions.
-        def set_album
-          @album = Album.find(params[:id])
+        def load_album
+          @album = Album.by_uuid(params[:id])&.first
+
+          return head :not_found if @album.blank?
         end
     
-        # Only allow a trusted parameter "white list" through.
         def album_params
-          params.require(:album).permit(:name, :description, :uuid, :number_of_stickers)
+          params.require(:album).permit(:name, :description, :number_of_stickers)
+        end
+
+        def load_albums
+          @albums = Album.all
+
+          return head :not_found if @albums.empty?
         end
     end
   end
