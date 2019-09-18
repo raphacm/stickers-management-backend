@@ -16,7 +16,7 @@ docker start $DB_CONTAINER_NAME > /dev/null 2>&1 || \
 RAILS_ENV=development rails db:create
 RAILS_ENV=development rails db:migrate
 # RAILS_ENV=development rails db:seed
-# RAILS_ENV=development rails data:migrate
+RAILS_ENV=development rails data:migrate
 
 # Test database
 RAILS_ENV=test rails db:test:prepare
