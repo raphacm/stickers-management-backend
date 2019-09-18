@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CollectionSerializer < ActiveModel::Serializer
   attribute :uuid, key: :id
   attributes :created_at, :updated_at
@@ -12,5 +14,4 @@ class CollectionSerializer < ActiveModel::Serializer
   def updated_at
     DatetimeHelper.convert_to_miliseconds(object.updated_at.to_datetime)
   end
-
 end

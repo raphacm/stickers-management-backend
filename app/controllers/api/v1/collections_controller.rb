@@ -1,22 +1,24 @@
+# frozen_string_literal: true
+
 module API
   module V1
     class CollectionsController < ApplicationController
-      before_action :load_collector, only: %i[index show, create destroy]
+      before_action :load_collector, only: %i[index show create destroy]
       before_action :load_album, only: %i[create]
       before_action :load_collections, only: %i[index]
       before_action :load_collection, only: %i[show destroy]
 
-      def index   
+      def index
         render json: @collections, status: :ok
       end
-    
+
       def show
         render json: @collection
       end
-    
+
       def create
         @collection = Collection.new(build_collection_params)
-        
+
         if @collection.save
           create_stickers
           render json: @collection, status: :created
@@ -24,7 +26,7 @@ module API
           render json: @collection.errors, status: :unprocessable_entity
         end
       end
-    
+
       def destroy
         if @collection.destroy
           head :no_content
@@ -32,10 +34,11 @@ module API
           render json: @collection.errors, status: :unprocessable_entity
         end
       end
-    
+
       private
+
       def create_stickers
-        @collection.album.number_of_stickers.times { |number| create_sticker(number+1) }
+        @collection.album.number_of_stickers.times { |number| create_sticker(number + 1) }
       end
 
       def create_sticker(number)
@@ -44,10 +47,10 @@ module API
 
       def load_collector
         @collector = Collector.by_uuid(params[:collector_id])&.first
-        
+
         return head :not_found if @collector.blank?
       end
-      
+
       def load_collections
         @collections = Collection.by_collector(@collector)
 
@@ -59,7 +62,7 @@ module API
         return head :not_found if @collection.blank?
       end
 
-      def load_album 
+      def load_album
         @album = Album.by_uuid(params[:album_id])&.first
         return head :not_found if @album.blank?
       end
@@ -67,8 +70,6 @@ module API
       def build_collection_params
         { collector: @collector, album: @album }
       end
-    
     end
   end
 end
-

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Collector < ApplicationRecord
-  scope :by_uuid, (->(uuid) { where(:uuid => uuid)})
+  scope :by_uuid, (->(uuid) { where(uuid: uuid) })
 
   after_initialize :set_uuid
 

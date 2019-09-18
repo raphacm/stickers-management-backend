@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class Collection < ApplicationRecord
   belongs_to :album
   belongs_to :collector
-  
+
   scope :by_uuid, (->(uuid) { where(uuid: uuid) })
   scope :by_collector, (->(collector) { where(collector_id: collector.id) })
 
