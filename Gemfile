@@ -7,10 +7,10 @@ ruby '2.6.3'
 
 gem 'active_model_serializers', '~> 0.8.3'
 gem 'bootsnap', '>= 1.4.2', require: false
+gem 'data_migrate', '~> 6.0'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.11'
 gem 'rails', '~> 6.0.0.rc1'
-gem 'data_migrate', '~> 6.0'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
