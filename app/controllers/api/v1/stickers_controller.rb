@@ -1,26 +1,11 @@
 module API
   module V1    
     class StickersController < ApplicationController
-      before_action :set_sticker, only: [:show, :update, :destroy]
-    
+      before_action :load_collection, :load_stickers, only: %i[index]
+      before_action :load_sticker, only: %i[update]
+
       def index
-        @stickers = Sticker.all
-    
-        render json: @stickers
-      end
-    
-      def show
-        render json: @sticker
-      end
-    
-      def create
-        @sticker = Sticker.new(sticker_params)
-    
-        if @sticker.save
-          render json: @sticker, status: :created, location: @sticker
-        else
-          render json: @sticker.errors, status: :unprocessable_entity
-        end
+        render json: @stickers, status :ok
       end
     
       def update
@@ -31,17 +16,26 @@ module API
         end
       end
     
-      def destroy
-        @sticker.destroy
-      end
-    
       private
-        def set_sticker
-          @sticker = Sticker.find(params[:id])
+        def load_collection          
+          @collection = Collection.by_uuid(params[:collection_id])&.first
+          return head :not_found if @collection.blank?
+        end
+
+        def load_stickers
+          @sticker = Sticker.by_collection(@collection)
+
+          return head :not_found if @stickers.empty?
+        end
+    
+        def load_sticker
+          @sticker = Sticker.by_uuid(params[:id])&.first
+
+          return head :not_found if @stickers.blank?
         end
     
         def sticker_params
-          params.require(:sticker).permit(:uuid, :collection_id, :number, :quantity)
+          params.require(:sticker).permit(:quantity)
         end
     end
   end

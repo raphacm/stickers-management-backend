@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_11_010325) do
+ActiveRecord::Schema.define(version: 2019_09_11_022121) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,18 @@ ActiveRecord::Schema.define(version: 2019_09_11_010325) do
     t.index ["uuid"], name: "index_collectors_on_uuid"
   end
 
+  create_table "stickers", force: :cascade do |t|
+    t.string "uuid", null: false
+    t.bigint "collection_id", null: false
+    t.integer "number", null: false
+    t.integer "quantity", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["collection_id"], name: "index_stickers_on_collection_id"
+    t.index ["uuid"], name: "index_stickers_on_uuid"
+  end
+
   add_foreign_key "collections", "albums"
   add_foreign_key "collections", "collectors"
+  add_foreign_key "stickers", "collections"
 end

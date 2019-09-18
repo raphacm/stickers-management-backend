@@ -1,5 +1,6 @@
 class StickerSerializer < ActiveModel::Serializer
   attribute :uuid, key: :id
-  attributes :uuid, :number, :quantity
+  attributes :number, :quantity, :status, :number_of_repeated
   has_one :collection
+
 end
